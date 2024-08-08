@@ -56,6 +56,11 @@ set(simple_camera_windows_bundled_libraries
   PARENT_SCOPE
 )
 
+# Find and include OpenCV
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+target_link_libraries(${BINARY_NAME} PRIVATE ${OpenCV_LIBS})
+
 # === Tests ===
 # These unit tests can be run from a terminal after building the example, or
 # from Visual Studio after opening the generated solution file.

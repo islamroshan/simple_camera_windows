@@ -1,11 +1,11 @@
 name: simple_camera_windows
-description: "A simple plugin with basic camera API to access and capture picture from the camera on windows platform"
-version: 0.0.5
-homepage: https://github.com/islamroshan/simple_camera_windows.git
+description: "A new Flutter plugin project."
+version: 0.0.1
+homepage:
 
 environment:
-  sdk: ">=3.1.0 <4.0.0"
-  flutter: '>=3.1.0'
+  sdk: '>=3.3.0 <4.0.0'
+  flutter: '>=3.3.0'
 
 dependencies:
   flutter:
@@ -34,6 +34,8 @@ flutter:
   # adding or updating assets for this project.
   plugin:
     platforms:
+      linux:
+        pluginClass: SimpleCameraWindowsPlugin
       windows:
         pluginClass: SimpleCameraWindowsPluginCApi
 

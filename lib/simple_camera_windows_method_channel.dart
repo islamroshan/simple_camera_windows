@@ -4,7 +4,7 @@ import 'simple_camera_windows_platform_interface.dart';
 /// An implementation of [SimpleCameraWindowsPlatform] that uses method channels.
 class MethodChannelSimpleCameraWindows extends SimpleCameraWindowsPlatform {
   /// The method channel used to interact with the native platform.
-  final methodChannel = const MethodChannel('dev.spantik/camera');
+  final methodChannel = const MethodChannel('simple_camera_windows');
 
   @override
   Future<void> initializeCamera() async {
