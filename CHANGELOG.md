@@ -1,3 +1,3 @@
-## 0.0.6
+## 0.0.7
 
-* New files added for plugin
+* Static libraries added for OPENCV

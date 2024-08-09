@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:simple_camera_windows/simple_camera_windows.dart';
+
 void main() {
   runApp(const MyApp());
 }

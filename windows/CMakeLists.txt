@@ -1,7 +1,3 @@
-# The Flutter tooling requires that developers have a version of Visual Studio
-# installed that includes CMake 3.14 or later. You should not increase this
-# version, as doing so will cause the plugin to fail to compile for some
-# customers of the plugin.
 cmake_minimum_required(VERSION 3.14)
 
 # Project-level configuration.
@@ -29,6 +25,9 @@ add_library(${PLUGIN_NAME} SHARED
   "simple_camera_windows_plugin_c_api.cpp"
   ${PLUGIN_SOURCES}
 )
+
+# Add the CMake module path for custom find scripts
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # Find and include OpenCV
 find_package(OpenCV REQUIRED)
