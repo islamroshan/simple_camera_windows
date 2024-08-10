@@ -1,3 +1,4 @@
+
 #include "simple_camera_windows_plugin.h" // This must be included before many other Windows headers.
 #include <windows.h>
 
@@ -25,7 +26,7 @@ using namespace std;
 using namespace cv;
 
 namespace simple_camera_windows {
-  
+
     Mat img;
     Mat capturedFrame;
     VideoCapture cam;
@@ -34,8 +35,8 @@ namespace simple_camera_windows {
     thread cameraThread;
 
     void SetCameraWindowIcon(HWND hwnd) {
-       
-        HICON hIcon = LoadIcon(GetModuleHandle(NULL),NULL);
+
+        HICON hIcon = LoadIcon(GetModuleHandle(NULL), NULL);
         if (hIcon) {
             SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
             SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
@@ -141,75 +142,77 @@ namespace simple_camera_windows {
     }
 
 
-// static
-void SimpleCameraWindowsPlugin::RegisterWithRegistrar(
-    flutter::PluginRegistrarWindows *registrar) {
-  auto channel =
-      std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
-          registrar->messenger(), "simple_camera_windows",
-          &flutter::StandardMethodCodec::GetInstance());
+    // static
+    void SimpleCameraWindowsPlugin::RegisterWithRegistrar(
+        flutter::PluginRegistrarWindows* registrar) {
+        auto channel =
+            std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+                registrar->messenger(), "simple_camera_windows",
+                &flutter::StandardMethodCodec::GetInstance());
 
-  auto plugin = std::make_unique<SimpleCameraWindowsPlugin>();
+        auto plugin = std::make_unique<SimpleCameraWindowsPlugin>();
 
-  channel->SetMethodCallHandler(
-      [plugin_pointer = plugin.get()](const auto &call, auto result) {
-        plugin_pointer->HandleMethodCall(call, std::move(result));
-      });
+        channel->SetMethodCallHandler(
+            [plugin_pointer = plugin.get()](const auto& call, auto result) {
+                plugin_pointer->HandleMethodCall(call, std::move(result));
+            });
 
-  registrar->AddPlugin(std::move(plugin));
-}
-
-SimpleCameraWindowsPlugin::SimpleCameraWindowsPlugin() {}
-
-SimpleCameraWindowsPlugin::~SimpleCameraWindowsPlugin() {}
-
-void SimpleCameraWindowsPlugin::HandleMethodCall(
-    const flutter::MethodCall<flutter::EncodableValue> &method_call,
-    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
-  if (method_call.method_name().compare("getPlatformVersion") == 0) {
-    std::ostringstream version_stream;
-    version_stream << "Windows ";
-    if (IsWindows10OrGreater()) {
-      version_stream << "10+";
-    } else if (IsWindows8OrGreater()) {
-      version_stream << "8";
-    } else if (IsWindows7OrGreater()) {
-      version_stream << "7";
+        registrar->AddPlugin(std::move(plugin));
     }
-    result->Success(flutter::EncodableValue(version_stream.str()));
-  }
-  else if (method_call.method_name().compare("initializeCamera") == 0) {
-          InitializeCamera();
-          result->Success();
-      }
-  else if (method_call.method_name().compare("startCamera") == 0) {
-      if (StartCamera()) {
-          result->Success();
-      }
-      else {
-          result->Error("CAMERA_ERROR", "Failed to start the camera.");
-      }
-  }
-  else if (method_call.method_name().compare("stopCamera") == 0) {
-      StopCamera();
-      result->Success();
-  }
-  else if (method_call.method_name().compare("captureFrame") == 0) {
-      CaptureFrame();
-      result->Success();
-  }
-  else if (method_call.method_name().compare("getCapturedFrame") == 0) {
-      std::vector<uchar> frame = GetCapturedFrame();
-      if (!frame.empty()) {
-          result->Success(frame);
-      }
-      else {
-          result->Error("NO_FRAME", "No frame captured.");
-      }
-  }
-  else {
-    result->NotImplemented();
-  }
-}
+
+    SimpleCameraWindowsPlugin::SimpleCameraWindowsPlugin() {}
+
+    SimpleCameraWindowsPlugin::~SimpleCameraWindowsPlugin() {}
+
+    void SimpleCameraWindowsPlugin::HandleMethodCall(
+        const flutter::MethodCall<flutter::EncodableValue>& method_call,
+        std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+        if (method_call.method_name().compare("getPlatformVersion") == 0) {
+            std::ostringstream version_stream;
+            version_stream << "Windows ";
+            if (IsWindows10OrGreater()) {
+                version_stream << "10+";
+            }
+            else if (IsWindows8OrGreater()) {
+                version_stream << "8";
+            }
+            else if (IsWindows7OrGreater()) {
+                version_stream << "7";
+            }
+            result->Success(flutter::EncodableValue(version_stream.str()));
+        }
+        else if (method_call.method_name().compare("initializeCamera") == 0) {
+            InitializeCamera();
+            result->Success();
+        }
+        else if (method_call.method_name().compare("startCamera") == 0) {
+            if (StartCamera()) {
+                result->Success();
+            }
+            else {
+                result->Error("CAMERA_ERROR", "Failed to start the camera.");
+            }
+        }
+        else if (method_call.method_name().compare("stopCamera") == 0) {
+            StopCamera();
+            result->Success();
+        }
+        else if (method_call.method_name().compare("captureFrame") == 0) {
+            CaptureFrame();
+            result->Success();
+        }
+        else if (method_call.method_name().compare("getCapturedFrame") == 0) {
+            std::vector<uchar> frame = GetCapturedFrame();
+            if (!frame.empty()) {
+                result->Success(frame);
+            }
+            else {
+                result->Error("NO_FRAME", "No frame captured.");
+            }
+        }
+        else {
+            result->NotImplemented();
+        }
+    }
 
 }  // namespace simple_camera_windows

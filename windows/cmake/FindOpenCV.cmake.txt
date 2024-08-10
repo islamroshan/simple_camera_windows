@@ -1,4 +1,0 @@
-# Find and include OpenCV
-set(OpenCV_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/../opencv/include")
-set(OpenCV_LIBS "${CMAKE_CURRENT_LIST_DIR}/../opencv/x64/vc17/lib")
-set(OpenCV_FOUND TRUE)

@@ -1,3 +1,3 @@
-## 0.0.7
+## 0.0.8
 
-* Static libraries added for OPENCV
+* OpenCV .dll file added

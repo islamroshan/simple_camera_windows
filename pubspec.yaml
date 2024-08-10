@@ -1,6 +1,6 @@
 name: simple_camera_windows
 description: "A simple plugin with basic camera API to access and capture picture from the camera on windows platform"
-version: 0.0.7
+version: 0.0.8
 homepage: https://github.com/islamroshan/simple_camera_windows.git
 
 environment:

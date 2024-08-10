@@ -1,3 +1,7 @@
+# The Flutter tooling requires that developers have a version of Visual Studio
+# installed that includes CMake 3.14 or later. You should not increase this
+# version, as doing so will cause the plugin to fail to compile for some
+# customers of the plugin.
 cmake_minimum_required(VERSION 3.14)
 
 # Project-level configuration.
@@ -26,18 +30,13 @@ add_library(${PLUGIN_NAME} SHARED
   ${PLUGIN_SOURCES}
 )
 
-# Add the CMake module path for custom find scripts
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
-# Find and include OpenCV
-find_package(OpenCV REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIRS})
-target_link_libraries(${PLUGIN_NAME} PRIVATE ${OpenCV_LIBS})
 
 # Apply a standard set of build settings that are configured in the
 # application-level CMakeLists.txt. This can be removed for plugins that want
 # full control over build settings.
 apply_standard_settings(${PLUGIN_NAME})
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4127 /WX-")
 
 # Symbols are hidden by default to reduce the chance of accidental conflicts
 # between plugins. This should not be removed; any symbols that should be
@@ -45,13 +44,24 @@ apply_standard_settings(${PLUGIN_NAME})
 set_target_properties(${PLUGIN_NAME} PROPERTIES
   CXX_VISIBILITY_PRESET hidden)
 target_compile_definitions(${PLUGIN_NAME} PRIVATE FLUTTER_PLUGIN_IMPL)
+ 
+# Set OpenCV directory path to the copied build folder
+set(OpenCV_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/build")
 
 # Source include directories and library dependencies. Add any plugin-specific
 # dependencies here.
-target_include_directories(${PLUGIN_NAME} INTERFACE
-  "${CMAKE_CURRENT_SOURCE_DIR}/include")
-target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin)
+target_include_directories(${PLUGIN_NAME} PUBLIC
+  "${CMAKE_CURRENT_SOURCE_DIR}/include"
+  "${OpenCV_DIR}/include"
+)
 
+# Link the appropriate OpenCV library based on the build configuration
+target_link_libraries(${PLUGIN_NAME} PRIVATE
+	flutter 
+	flutter_wrapper_plugin
+	"$<IF:$<CONFIG:Debug>,${OpenCV_DIR}/x64/vc16/lib/opencv_world4100d.lib,${OpenCV_DIR}/x64/vc16/lib/opencv_world4100.lib>"
+)
+ 
 # List of absolute paths to libraries that should be bundled with the plugin.
 # This list could contain prebuilt libraries, or libraries created by an
 # external build triggered from this build file.
@@ -60,13 +70,30 @@ set(simple_camera_windows_bundled_libraries
   PARENT_SCOPE
 )
 
+# Ensure the Debug and Release directories exist before copying the DLL
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/runner/Debug")
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/runner/Release")
+
+# Custom command to copy OpenCV DLL to Debug directory
+add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${OpenCV_DIR}/x64/vc16/bin/opencv_world4100d.dll"
+        "${CMAKE_BINARY_DIR}/runner/Debug/opencv_world4100d.dll"
+)
+
+# Custom command to copy OpenCV DLL to Release directory
+add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${OpenCV_DIR}/x64/vc16/bin/opencv_world4100.dll"
+        "${CMAKE_BINARY_DIR}/runner/Release/opencv_world4100.dll"
+)
 # === Tests ===
 # These unit tests can be run from a terminal after building the example, or
 # from Visual Studio after opening the generated solution file.
 
 # Only enable test builds when building the example (which sets this variable)
 # so that plugin clients aren't building the tests.
-if (${include_${PROJECT_NAME}_tests})
+if (${include_${PROJECT_NAME}_testss})
 set(TEST_RUNNER "${PROJECT_NAME}_test")
 enable_testing()
 
@@ -89,15 +116,31 @@ add_executable(${TEST_RUNNER}
   ${PLUGIN_SOURCES}
 )
 apply_standard_settings(${TEST_RUNNER})
-target_include_directories(${TEST_RUNNER} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+# Set OpenCV directory path to the copied build folder
+set(OpenCV_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/build")
+target_include_directories(${TEST_RUNNER} PUBLIC
+  "${CMAKE_CURRENT_SOURCE_DIR}"
+  "${OpenCV_DIR}/include"
+)
 target_link_libraries(${TEST_RUNNER} PRIVATE flutter_wrapper_plugin)
 target_link_libraries(${TEST_RUNNER} PRIVATE gtest_main gmock)
-target_link_libraries(${TEST_RUNNER} PRIVATE ${OpenCV_LIBS}) # Add this line
-# flutter_wrapper_plugin has link dependencies on the Flutter DLL.
-add_custom_command(TARGET ${TEST_RUNNER} POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_if_different
-  "${FLUTTER_LIBRARY}" $<TARGET_FILE_DIR:${TEST_RUNNER}>
+
+# Source include directories and library dependencies. Add any plugin-specific
+# dependencies here.
+target_link_libraries(${TEST_RUNNER} PRIVATE
+	"${OpenCV_DIR}/x64/vc16/lib/opencv_world4100d.lib"
 )
+message(STATUS "Flutter Library Path: ${FLUTTER_LIBRARY}")
+
+if(EXISTS "${FLUTTER_LIBRARY}")
+    add_custom_command(TARGET ${TEST_RUNNER} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${FLUTTER_LIBRARY}" $<TARGET_FILE_DIR:${TEST_RUNNER}>
+    )
+    message(STATUS "Flutter library copied successfully.")
+else()
+    message(FATAL_ERROR "Flutter library not found at ${FLUTTER_LIBRARY}")
+endif()
 
 # Enable automatic test discovery.
 include(GoogleTest)
