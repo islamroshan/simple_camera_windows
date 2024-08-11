@@ -74,47 +74,48 @@ set(simple_camera_windows_bundled_libraries
 )
 
 # Ensure the Debug and Release directories exist before copying the DLL
-file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/runner/Debug")
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/runner/Release")
-
-# Custom command to copy OpenCV DLL to Debug directory
-add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${OpenCV_DIR}/x64/vc17/bin/opencv_core4100d.dll"
-        "${CMAKE_BINARY_DIR}/runner/Debug/opencv_core4100d.dll"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${OpenCV_DIR}/x64/vc17/bin/opencv_highgui4100d.dll"
-        "${CMAKE_BINARY_DIR}/runner/Debug/opencv_highgui4100d.dll"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${OpenCV_DIR}/x64/vc17/bin/opencv_imgcodecs4100d.dll"
-        "${CMAKE_BINARY_DIR}/runner/Debug/opencv_imgcodecs4100d.dll"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${OpenCV_DIR}/x64/vc17/bin/opencv_imgproc4100d.dll"
-        "${CMAKE_BINARY_DIR}/runner/Debug/opencv_imgproc4100d.dll"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${OpenCV_DIR}/x64/vc17/bin/opencv_videoio4100d.dll"
-        "${CMAKE_BINARY_DIR}/runner/Debug/opencv_videoio4100d.dll"
-)
-
-# Custom command to copy OpenCV DLL to Release directory
-add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${OpenCV_DIR}/x64/vc17/bin/opencv_core4100.dll"
-        "${CMAKE_BINARY_DIR}/runner/Release/opencv_core4100.dll"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${OpenCV_DIR}/x64/vc17/bin/opencv_highgui4100.dll"
-        "${CMAKE_BINARY_DIR}/runner/Release/opencv_highgui4100.dll"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${OpenCV_DIR}/x64/vc17/bin/opencv_imgcodecs4100.dll"
-        "${CMAKE_BINARY_DIR}/runner/Release/opencv_imgcodecs4100.dll"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${OpenCV_DIR}/x64/vc17/bin/opencv_imgproc4100.dll"
-        "${CMAKE_BINARY_DIR}/runner/Release/opencv_imgproc4100.dll"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${OpenCV_DIR}/x64/vc17/bin/opencv_videoio4100.dll"
-        "${CMAKE_BINARY_DIR}/runner/Release/opencv_videoio4100.dll"
-)
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/runner/Debug")
  
+    # Custom command to copy OpenCV DLL to Debug directory
+    add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${OpenCV_DIR}/x64/vc17/bin/opencv_core4100d.dll"
+            "${CMAKE_BINARY_DIR}/runner/Debug/opencv_core4100d.dll"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${OpenCV_DIR}/x64/vc17/bin/opencv_highgui4100d.dll"
+            "${CMAKE_BINARY_DIR}/runner/Debug/opencv_highgui4100d.dll"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${OpenCV_DIR}/x64/vc17/bin/opencv_imgcodecs4100d.dll"
+            "${CMAKE_BINARY_DIR}/runner/Debug/opencv_imgcodecs4100d.dll"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${OpenCV_DIR}/x64/vc17/bin/opencv_imgproc4100d.dll"
+            "${CMAKE_BINARY_DIR}/runner/Debug/opencv_imgproc4100d.dll"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${OpenCV_DIR}/x64/vc17/bin/opencv_videoio4100d.dll"
+            "${CMAKE_BINARY_DIR}/runner/Debug/opencv_videoio4100d.dll"
+    )
+ 
+    # Custom command to copy OpenCV DLL to Release directory
+    add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${OpenCV_DIR}/x64/vc17/bin/opencv_core4100.dll"
+            "${CMAKE_BINARY_DIR}/runner/Release/opencv_core4100.dll"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${OpenCV_DIR}/x64/vc17/bin/opencv_highgui4100.dll"
+            "${CMAKE_BINARY_DIR}/runner/Release/opencv_highgui4100.dll"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${OpenCV_DIR}/x64/vc17/bin/opencv_imgcodecs4100.dll"
+            "${CMAKE_BINARY_DIR}/runner/Release/opencv_imgcodecs4100.dll"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${OpenCV_DIR}/x64/vc17/bin/opencv_imgproc4100.dll"
+            "${CMAKE_BINARY_DIR}/runner/Release/opencv_imgproc4100.dll"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${OpenCV_DIR}/x64/vc17/bin/opencv_videoio4100.dll"
+            "${CMAKE_BINARY_DIR}/runner/Release/opencv_videoio4100.dll"
+    )
+ 
+
 # === Tests ===
 # These unit tests can be run from a terminal after building the example, or
 # from Visual Studio after opening the generated solution file.
