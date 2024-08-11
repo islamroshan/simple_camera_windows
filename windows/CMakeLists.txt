@@ -88,7 +88,7 @@ file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/runner/Debug")
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${OpenCV_DIR}/x64/vc17/bin/opencv_imgcodecs4100d.dll"
             "${CMAKE_BINARY_DIR}/runner/Debug/opencv_imgcodecs4100d.dll"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+ 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${OpenCV_DIR}/x64/vc17/bin/opencv_imgproc4100d.dll"
             "${CMAKE_BINARY_DIR}/runner/Debug/opencv_imgproc4100d.dll"
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
@@ -107,7 +107,7 @@ file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/runner/Debug")
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${OpenCV_DIR}/x64/vc17/bin/opencv_imgcodecs4100.dll"
             "${CMAKE_BINARY_DIR}/runner/Release/opencv_imgcodecs4100.dll"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${OpenCV_DIR}/x64/vc17/bin/opencv_imgproc4100.dll"
             "${CMAKE_BINARY_DIR}/runner/Release/opencv_imgproc4100.dll"
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
