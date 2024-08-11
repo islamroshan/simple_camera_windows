@@ -23,7 +23,7 @@
 #      - OpenCV_VERSION_MAJOR            : Major version part of OpenCV_VERSION: "4"
 #      - OpenCV_VERSION_MINOR            : Minor version part of OpenCV_VERSION: "10"
 #      - OpenCV_VERSION_PATCH            : Patch version part of OpenCV_VERSION: "0"
-#      - OpenCV_VERSION_STATUS           : Development status of this build: ""
+#      - OpenCV_VERSION_STATUS           : Development status of this build: "-dev"
 #
 #    Advanced variables:
 #      - OpenCV_SHARED

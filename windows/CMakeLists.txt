@@ -59,7 +59,10 @@ target_include_directories(${PLUGIN_NAME} PUBLIC
 target_link_libraries(${PLUGIN_NAME} PRIVATE
 	flutter 
 	flutter_wrapper_plugin
-	"$<IF:$<CONFIG:Debug>,${OpenCV_DIR}/x64/vc16/lib/opencv_world4100d.lib,${OpenCV_DIR}/x64/vc16/lib/opencv_world4100.lib>"
+	"$<IF:$<CONFIG:Debug>,${OpenCV_DIR}/x64/vc17/lib/opencv_core4100d.lib,${OpenCV_DIR}/x64/vc17/lib/opencv_core4100.lib>"
+    	"$<IF:$<CONFIG:Debug>,${OpenCV_DIR}/x64/vc17/lib/opencv_highgui4100d.lib,${OpenCV_DIR}/x64/vc17/lib/opencv_highgui4100.lib>"
+    	"$<IF:$<CONFIG:Debug>,${OpenCV_DIR}/x64/vc17/lib/opencv_imgcodecs4100d.lib,${OpenCV_DIR}/x64/vc17/lib/opencv_imgcodecs4100.lib>"
+    	"$<IF:$<CONFIG:Debug>,${OpenCV_DIR}/x64/vc17/lib/opencv_videoio4100d.lib,${OpenCV_DIR}/x64/vc17/lib/opencv_videoio4100.lib>"
 )
  
 # List of absolute paths to libraries that should be bundled with the plugin.
@@ -77,16 +80,41 @@ file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/runner/Release")
 # Custom command to copy OpenCV DLL to Debug directory
 add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${OpenCV_DIR}/x64/vc16/bin/opencv_world4100d.dll"
-        "${CMAKE_BINARY_DIR}/runner/Debug/opencv_world4100d.dll"
+        "${OpenCV_DIR}/x64/vc17/bin/opencv_core4100d.dll"
+        "${CMAKE_BINARY_DIR}/runner/Debug/opencv_core4100d.dll"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${OpenCV_DIR}/x64/vc17/bin/opencv_highgui4100d.dll"
+        "${CMAKE_BINARY_DIR}/runner/Debug/opencv_highgui4100d.dll"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${OpenCV_DIR}/x64/vc17/bin/opencv_imgcodecs4100d.dll"
+        "${CMAKE_BINARY_DIR}/runner/Debug/opencv_imgcodecs4100d.dll"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${OpenCV_DIR}/x64/vc17/bin/opencv_imgproc4100d.dll"
+        "${CMAKE_BINARY_DIR}/runner/Debug/opencv_imgproc4100d.dll"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${OpenCV_DIR}/x64/vc17/bin/opencv_videoio4100d.dll"
+        "${CMAKE_BINARY_DIR}/runner/Debug/opencv_videoio4100d.dll"
 )
 
 # Custom command to copy OpenCV DLL to Release directory
 add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${OpenCV_DIR}/x64/vc16/bin/opencv_world4100.dll"
-        "${CMAKE_BINARY_DIR}/runner/Release/opencv_world4100.dll"
+        "${OpenCV_DIR}/x64/vc17/bin/opencv_core4100.dll"
+        "${CMAKE_BINARY_DIR}/runner/Release/opencv_core4100.dll"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${OpenCV_DIR}/x64/vc17/bin/opencv_highgui4100.dll"
+        "${CMAKE_BINARY_DIR}/runner/Release/opencv_highgui4100.dll"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${OpenCV_DIR}/x64/vc17/bin/opencv_imgcodecs4100.dll"
+        "${CMAKE_BINARY_DIR}/runner/Release/opencv_imgcodecs4100.dll"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${OpenCV_DIR}/x64/vc17/bin/opencv_imgproc4100.dll"
+        "${CMAKE_BINARY_DIR}/runner/Release/opencv_imgproc4100.dll"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${OpenCV_DIR}/x64/vc17/bin/opencv_videoio4100.dll"
+        "${CMAKE_BINARY_DIR}/runner/Release/opencv_videoio4100.dll"
 )
+ 
 # === Tests ===
 # These unit tests can be run from a terminal after building the example, or
 # from Visual Studio after opening the generated solution file.
@@ -128,7 +156,10 @@ target_link_libraries(${TEST_RUNNER} PRIVATE gtest_main gmock)
 # Source include directories and library dependencies. Add any plugin-specific
 # dependencies here.
 target_link_libraries(${TEST_RUNNER} PRIVATE
-	"${OpenCV_DIR}/x64/vc16/lib/opencv_world4100d.lib"
+    "$<IF:$<CONFIG:Debug>,${OpenCV_DIR}/x64/vc17/lib/opencv_core4100d.lib,${OpenCV_DIR}/x64/vc17/lib/opencv_core4100.lib>"
+    "$<IF:$<CONFIG:Debug>,${OpenCV_DIR}/x64/vc17/lib/opencv_highgui4100d.lib,${OpenCV_DIR}/x64/vc17/lib/opencv_highgui4100.lib>"
+    "$<IF:$<CONFIG:Debug>,${OpenCV_DIR}/x64/vc17/lib/opencv_imgcodecs4100d.lib,${OpenCV_DIR}/x64/vc17/lib/opencv_imgcodecs4100.lib>"
+    "$<IF:$<CONFIG:Debug>,${OpenCV_DIR}/x64/vc17/lib/opencv_videoio4100d.lib,${OpenCV_DIR}/x64/vc17/lib/opencv_videoio4100.lib>"
 )
 message(STATUS "Flutter Library Path: ${FLUTTER_LIBRARY}")
 
